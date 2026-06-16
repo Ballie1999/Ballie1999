@@ -568,3 +568,125 @@ body.dashboard-page {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Settings grid ── */
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 860px) {
+  .settings-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Alert success ── */
+.alert-success {
+  border: 1px solid rgba(73, 246, 195, 0.45);
+  background: rgba(73, 246, 195, 0.14);
+  color: #9ffde7;
+}
+
+/* ── Bot card extras ── */
+.proxy-col {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.proxy-status {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.proxy-ok  { color: var(--neon); }
+.proxy-bad { color: var(--danger); }
+
+.mc-status { font-size: 0.82rem; }
+
+.err-row   { align-items: flex-start; }
+.err-msg   { font-size: 0.75rem; word-break: break-word; max-width: 65%; text-align: right; }
+
+/* ── Queue notice ── */
+.queue-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 209, 102, 0.12);
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  border-radius: 10px;
+  padding: 0.4rem 0.65rem;
+}
+
+.queue-pos {
+  font-weight: 700;
+  color: var(--warning);
+}
+
+/* ── Auth notice ── */
+.auth-notice {
+  background: rgba(73, 246, 195, 0.1);
+  border: 1px solid rgba(73, 246, 195, 0.35);
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.auth-notice .section-label { margin-bottom: 0.3rem; display: block; }
+
+/* ── Command bar ── */
+.cmd-bar {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: -0.1rem;
+}
+
+.cmd-input {
+  flex: 1;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(13, 20, 36, 0.9);
+  color: var(--text);
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+.cmd-input:focus {
+  outline: none;
+  border-color: var(--neon);
+}
+
+/* ── Bot status pills for new statuses ── */
+.status-offline    { background: rgba(142,162,198,0.1); color: #8da2c6; border-color: rgba(142,162,198,0.25); }
+.status-connecting { background: rgba(73,246,195,0.1); color: #7ffadb; border-color: rgba(73,246,195,0.3); }
+.status-auth       { background: rgba(255,209,102,0.15); color: #ffd98f; border-color: rgba(255,209,102,0.4); }
+.status-queued     { background: rgba(255,209,102,0.15); color: #ffd98f; border-color: rgba(255,209,102,0.4); }
+.status-unknown    { background: rgba(255,209,102,0.15); color: #ffd98f; border-color: rgba(255,209,102,0.35); }
+
+/* ── Button variants for new bot controls ── */
+.btn-connect {
+  background: linear-gradient(135deg, #2de7b6, #46f2dc);
+  color: #03110f;
+  box-shadow: 0 0 8px rgba(73,246,195,0.2);
+  border: none;
+}
+.btn-connect:hover { transform: translateY(-1px); }
+.btn-connect:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.btn-reconnect {
+  background: rgba(73,246,195,0.12);
+  color: var(--neon);
+  border: 1px solid rgba(73,246,195,0.35);
+}
+.btn-reconnect:hover { background: rgba(73,246,195,0.2); }
+.btn-reconnect:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-disconnect {
+  background: rgba(255,106,139,0.14);
+  color: #ffadc0;
+  border: 1px solid rgba(255,106,139,0.35);
+}
+.btn-disconnect:hover { background: rgba(255,106,139,0.24); }
+.btn-disconnect:disabled { opacity: 0.4; cursor: not-allowed; }

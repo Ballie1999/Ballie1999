@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — gkku</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body class="dashboard-page">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">gkku</div>
+      <div class="sidebar-label">Control</div>
+      <nav class="sidebar-menu">
+        <a href="/">Dashboard</a>
+        <a href="/accounts/add">Add Account</a>
+        <a href="/settings" class="active">Settings</a>
+        <a href="/logout">Logout</a>
+      </nav>
+      <div class="sidebar-user">Signed in as <strong><%= username %></strong></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="main-header">
+        <div>
+          <p class="section-label">Account</p>
+          <h1>Settings</h1>
+        </div>
+      </header>
+
+      <% if (error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+      <% if (success) { %>
+        <div class="alert alert-success"><%= success %></div>
+      <% } %>
+
+      <div class="settings-grid">
+        <!-- Change password -->
+        <div class="form-card">
+          <h3>Change Password</h3>
+          <form method="POST" action="/settings/password">
+            <div class="form-group">
+              <label for="current_password">Current Password</label>
+              <input type="password" id="current_password" name="current_password" required />
+            </div>
+            <div class="form-group">
+              <label for="new_password">New Password <small>(min 8 chars)</small></label>
+              <input type="password" id="new_password" name="new_password" required />
+            </div>
+            <div class="form-group">
+              <label for="confirm_password">Confirm New Password</label>
+              <input type="password" id="confirm_password" name="confirm_password" required />
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Update Password</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Recovery email -->
+        <div class="form-card">
+          <h3>Recovery Email</h3>
+          <p class="muted" style="margin-bottom:1rem;font-size:.82rem;">
+            Used for password reset emails. Requires SMTP to be configured in .env.
+          </p>
+          <form method="POST" action="/settings/email">
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email"
+                value="<%= user.email || '' %>"
+                placeholder="you@example.com" />
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Save Email</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

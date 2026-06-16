@@ -8,9 +8,9 @@
 </head>
 <body class="dashboard-page">
   <% const RAM_PER_BOT_GB = 0.45; %>
-  <% const onlineCount = accounts.filter((acc) => acc.status === 'active').length; %>
-  <% const queueCount = accounts.filter((acc) => acc.status === 'inactive').length; %>
-  <% const ramUsage = (accounts.length * RAM_PER_BOT_GB).toFixed(1); %>
+  <% const onlineCount = accounts.filter((acc) => acc.bot_status === 'connected').length; %>
+  <% const queueCount  = accounts.filter((acc) => acc.bot_status === 'queued').length; %>
+  <% const ramUsage    = (accounts.length * RAM_PER_BOT_GB).toFixed(1); %>
 
   <div class="app-shell">
     <aside class="sidebar">
@@ -19,6 +19,7 @@
       <nav class="sidebar-menu">
         <a href="/" class="active">Dashboard</a>
         <a href="/accounts/add">Add Account</a>
+        <a href="/settings">Settings</a>
         <a href="/logout">Logout</a>
       </nav>
       <div class="sidebar-user">Signed in as <strong><%= username %></strong></div>
@@ -40,20 +41,20 @@
         </article>
         <article class="stats-card">
           <p class="section-label">Online</p>
-          <h3><%= onlineCount %></h3>
+          <h3 id="stat-online"><%= onlineCount %></h3>
         </article>
         <article class="stats-card">
           <p class="section-label">In Queue</p>
-          <h3><%= queueCount %></h3>
+          <h3 id="stat-queue"><%= queueCount %></h3>
         </article>
         <article class="stats-card">
-          <p class="section-label">RAM</p>
+          <p class="section-label">Est. RAM</p>
           <h3><%= ramUsage %> GB</h3>
         </article>
       </section>
 
       <section class="search-row">
-        <input type="text" class="search-input" placeholder="Search bot cards..." aria-label="Search accounts" />
+        <input type="text" class="search-input" id="search-input" placeholder="Search bots…" aria-label="Search accounts" />
         <div class="search-actions">
           <a href="/" class="btn btn-secondary btn-sm">Refresh</a>
           <a href="/accounts/add" class="btn btn-primary btn-sm">New</a>
@@ -65,25 +66,45 @@
           <p>No accounts yet. Click <strong>+ Add Account</strong> to get started.</p>
         </div>
       <% } else { %>
-        <section class="bot-grid">
+        <section class="bot-grid" id="bot-grid">
           <% accounts.forEach((acc) => { %>
-            <article class="bot-card">
+            <article class="bot-card" id="card-<%= acc.id %>" data-username="<%= acc.username.toLowerCase() %>">
               <div class="bot-card-head">
                 <div>
                   <p class="section-label">Username</p>
                   <h3><%= acc.username %></h3>
                 </div>
-                <span class="status-pill status-<%= acc.status %>"><%= acc.status %></span>
+                <span class="status-pill" id="pill-<%= acc.id %>"></span>
+              </div>
+
+              <!-- Microsoft auth notice (shown when bot needs device auth) -->
+              <div class="auth-notice" id="auth-<%= acc.id %>" style="display:none">
+                <p class="section-label">Microsoft Auth Required</p>
+                <p class="auth-msg" id="auth-msg-<%= acc.id %>"></p>
+              </div>
+
+              <!-- Queue position badge -->
+              <div class="queue-notice" id="queue-<%= acc.id %>" style="display:none">
+                <span class="section-label">Queue position:</span>
+                <span class="queue-pos" id="qpos-<%= acc.id %>">—</span>
               </div>
 
               <div class="bot-card-body">
                 <div class="bot-row">
                   <span class="section-label">Proxy</span>
                   <% if (acc.proxy_host) { %>
-                    <code><%= acc.proxy_host %>:<%= acc.proxy_port %></code>
+                    <div class="proxy-col">
+                      <code><%= acc.proxy_host %>:<%= acc.proxy_port %></code>
+                      <span class="proxy-status" id="proxy-<%= acc.id %>"></span>
+                    </div>
                   <% } else { %>
                     <span class="muted">None</span>
                   <% } %>
+                </div>
+
+                <div class="bot-row">
+                  <span class="section-label">MC Server</span>
+                  <span class="mc-status" id="mc-<%= acc.id %>">2b2t.org</span>
                 </div>
 
                 <div class="bot-row">
@@ -91,15 +112,28 @@
                   <span><%= acc.notes || '—' %></span>
                 </div>
 
-                <div class="bot-row">
-                  <span class="section-label">Added</span>
-                  <span class="muted"><%= new Date(acc.created_at).toLocaleDateString() %></span>
+                <div class="bot-row err-row" id="err-<%= acc.id %>" style="display:none">
+                  <span class="section-label">Error</span>
+                  <span class="muted err-msg" id="errmsg-<%= acc.id %>"></span>
                 </div>
               </div>
 
+              <!-- Command bar (visible when connected) -->
+              <div class="cmd-bar" id="cmd-<%= acc.id %>" style="display:none">
+                <input type="text" class="cmd-input" id="cmdinput-<%= acc.id %>"
+                       placeholder=".connect  .disconnect  or any chat msg"
+                       data-id="<%= acc.id %>" />
+                <button class="btn btn-sm btn-secondary cmd-send"
+                        data-id="<%= acc.id %>">Send</button>
+              </div>
+
               <div class="bot-actions">
+                <button class="btn btn-sm btn-connect"  data-id="<%= acc.id %>">Connect</button>
+                <button class="btn btn-sm btn-reconnect" data-id="<%= acc.id %>">Reconnect</button>
+                <button class="btn btn-sm btn-disconnect" data-id="<%= acc.id %>">Disconnect</button>
                 <a href="/accounts/edit/<%= acc.id %>" class="btn btn-sm btn-secondary">Edit</a>
-                <form method="POST" action="/accounts/delete/<%= acc.id %>" onsubmit="return confirm('Delete <%= acc.username %>?')">
+                <form method="POST" action="/accounts/delete/<%= acc.id %>"
+                      onsubmit="return confirm('Delete <%= acc.username %>?')">
                   <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                 </form>
               </div>
@@ -109,5 +143,7 @@
       <% } %>
     </main>
   </div>
+
+  <script src="/script.js"></script>
 </body>
 </html>
