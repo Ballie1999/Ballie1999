@@ -1,0 +1,227 @@
+/* ─────────────────────────────────────────
+   Minecraft Panel — Dark Theme Stylesheet
+   ───────────────────────────────────────── */
+
+:root {
+  --bg:        #0f1117;
+  --surface:   #1a1d27;
+  --surface2:  #22263a;
+  --border:    #2e3347;
+  --text:      #e2e8f0;
+  --muted:     #7a859e;
+  --primary:   #4ade80;   /* green accent */
+  --primary-d: #22c55e;
+  --danger:    #f87171;
+  --danger-d:  #ef4444;
+  --secondary: #3b4256;
+  --secondary-d: #2e3347;
+  --radius:    8px;
+  --font:      'Segoe UI', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  min-height: 100vh;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── NAV ── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: .5px;
+}
+
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { color: var(--text); font-size: .9rem; }
+.nav-links a:hover { color: var(--primary); text-decoration: none; }
+
+/* ── MAIN ── */
+main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.page-header h2 { font-size: 1.4rem; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-block;
+  padding: .45rem 1rem;
+  border-radius: var(--radius);
+  font-size: .875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background .15s;
+  text-decoration: none;
+}
+
+.btn-primary   { background: var(--primary);   color: #0f1117; }
+.btn-primary:hover { background: var(--primary-d); text-decoration: none; }
+
+.btn-secondary { background: var(--secondary);  color: var(--text); }
+.btn-secondary:hover { background: var(--secondary-d); text-decoration: none; }
+
+.btn-danger    { background: var(--danger);     color: #0f1117; }
+.btn-danger:hover { background: var(--danger-d); }
+
+.btn-sm   { padding: .3rem .7rem; font-size: .8rem; }
+.btn-full { width: 100%; text-align: center; padding: .65rem; }
+
+/* ── TABLE ── */
+.table-wrapper { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+
+table { width: 100%; border-collapse: collapse; background: var(--surface); }
+thead { background: var(--surface2); }
+th, td { padding: .75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+th { font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface2); }
+
+code { font-size: .82rem; background: var(--surface2); padding: .1rem .4rem; border-radius: 4px; }
+
+.muted { color: var(--muted); font-size: .85rem; }
+
+.actions { display: flex; gap: .4rem; align-items: center; }
+
+/* ── BADGES ── */
+.badge {
+  font-size: .7rem;
+  padding: .1rem .4rem;
+  border-radius: 4px;
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  margin-left: .3rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: .2rem .6rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.status-active   { background: #14532d; color: #4ade80; }
+.status-inactive { background: #1e293b; color: #94a3b8; }
+.status-banned   { background: #450a0a; color: #f87171; }
+.status-unknown  { background: #1e293b; color: #cbd5e1; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px dashed var(--border);
+}
+
+/* ── ALERTS ── */
+.alert {
+  padding: .75rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: .9rem;
+}
+.alert-error { background: #450a0a; color: var(--danger); border: 1px solid var(--danger-d); }
+
+/* ── FORMS ── */
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 760px;
+}
+
+.form-card h3 {
+  font-size: .9rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--muted);
+  margin: 1.5rem 0 .75rem;
+}
+.form-card h3:first-child { margin-top: 0; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+.form-group { display: flex; flex-direction: column; gap: .4rem; margin-bottom: .5rem; }
+
+label { font-size: .85rem; color: var(--muted); font-weight: 500; }
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: .5rem .75rem;
+  font-size: .9rem;
+  width: 100%;
+  transition: border-color .15s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+textarea { resize: vertical; font-family: var(--font); }
+
+.required { color: var(--danger); }
+
+.form-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
+
+/* ── LOGIN PAGE ── */
+body.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.login-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+}
+
+.login-box h1 { font-size: 1.4rem; color: var(--primary); text-align: center; margin-bottom: .25rem; }
+.login-box h2 { font-size: 1rem; color: var(--muted); text-align: center; margin-bottom: 1.5rem; font-weight: 400; }
