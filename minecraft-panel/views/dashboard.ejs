@@ -3,74 +3,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — MC Panel</title>
+  <title>Dashboard — gkku</title>
   <link rel="stylesheet" href="/style.css" />
 </head>
-<body>
-  <nav>
-    <div class="nav-brand">⛏ MC Panel</div>
-    <div class="nav-links">
-      <a href="/">Dashboard</a>
-      <a href="/logout">Logout (<%= username %>)</a>
-    </div>
-  </nav>
-  <main>
-    <div class="page-header">
-      <h2>Minecraft Accounts</h2>
-      <a href="/accounts/add" class="btn btn-primary">+ Add Account</a>
-    </div>
+<body class="dashboard-page">
+  <% const onlineCount = accounts.filter((acc) => acc.status === 'active').length; %>
+  <% const queueCount = accounts.filter((acc) => /(queue|queued|pending)/i.test(acc.status || '')).length; %>
+  <% const ramUsage = (accounts.length * 0.45).toFixed(1); %>
 
-    <% if (accounts.length === 0) { %>
-      <div class="empty-state">
-        <p>No accounts yet. Click <strong>+ Add Account</strong> to get started.</p>
-      </div>
-    <% } else { %>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Proxy</th>
-              <th>Status</th>
-              <th>Notes</th>
-              <th>Added</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% accounts.forEach((acc, i) => { %>
-              <tr>
-                <td><%= i + 1 %></td>
-                <td><strong><%= acc.username %></strong></td>
-                <td><%= acc.email || '—' %></td>
-                <td>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">gkku</div>
+      <div class="sidebar-label">Control</div>
+      <nav class="sidebar-menu">
+        <a href="/" class="active">Dashboard</a>
+        <a href="/accounts/add">Add Account</a>
+        <a href="/logout">Logout</a>
+      </nav>
+      <div class="sidebar-user">Signed in as <strong><%= username %></strong></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="main-header">
+        <div>
+          <p class="section-label">Overview</p>
+          <h1>Bot Dashboard</h1>
+        </div>
+        <a href="/accounts/add" class="btn btn-primary">+ Add Account</a>
+      </header>
+
+      <section class="stats-row">
+        <article class="stats-card">
+          <p class="section-label">Bots</p>
+          <h3><%= accounts.length %></h3>
+        </article>
+        <article class="stats-card">
+          <p class="section-label">Online</p>
+          <h3><%= onlineCount %></h3>
+        </article>
+        <article class="stats-card">
+          <p class="section-label">In Queue</p>
+          <h3><%= queueCount %></h3>
+        </article>
+        <article class="stats-card">
+          <p class="section-label">RAM</p>
+          <h3><%= ramUsage %> GB</h3>
+        </article>
+      </section>
+
+      <section class="search-row">
+        <input type="text" class="search-input" placeholder="Search bot cards..." aria-label="Search accounts" />
+        <div class="search-actions">
+          <a href="/" class="btn btn-secondary btn-sm">Refresh</a>
+          <a href="/accounts/add" class="btn btn-primary btn-sm">New</a>
+        </div>
+      </section>
+
+      <% if (accounts.length === 0) { %>
+        <div class="empty-state">
+          <p>No accounts yet. Click <strong>+ Add Account</strong> to get started.</p>
+        </div>
+      <% } else { %>
+        <section class="bot-grid">
+          <% accounts.forEach((acc) => { %>
+            <article class="bot-card">
+              <div class="bot-card-head">
+                <div>
+                  <p class="section-label">Username</p>
+                  <h3><%= acc.username %></h3>
+                </div>
+                <span class="status-pill status-<%= acc.status %>"><%= acc.status %></span>
+              </div>
+
+              <div class="bot-card-body">
+                <div class="bot-row">
+                  <span class="section-label">Proxy</span>
                   <% if (acc.proxy_host) { %>
                     <code><%= acc.proxy_host %>:<%= acc.proxy_port %></code>
-                    <% if (acc.proxy_user) { %><span class="badge">auth</span><% } %>
                   <% } else { %>
                     <span class="muted">None</span>
                   <% } %>
-                </td>
-                <td>
-                  <span class="status-badge status-<%= acc.status %>"><%= acc.status %></span>
-                </td>
-                <td><%= acc.notes || '—' %></td>
-                <td class="muted"><%= new Date(acc.created_at).toLocaleDateString() %></td>
-                <td class="actions">
-                  <a href="/accounts/edit/<%= acc.id %>" class="btn btn-sm btn-secondary">Edit</a>
-                  <form method="POST" action="/accounts/delete/<%= acc.id %>" style="display:inline"
-                        onsubmit="return confirm('Delete <%= acc.username %>?')">
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                  </form>
-                </td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-    <% } %>
-  </main>
+                </div>
+
+                <div class="bot-row">
+                  <span class="section-label">Notes</span>
+                  <span><%= acc.notes || '—' %></span>
+                </div>
+
+                <div class="bot-row">
+                  <span class="section-label">Added</span>
+                  <span class="muted"><%= new Date(acc.created_at).toLocaleDateString() %></span>
+                </div>
+              </div>
+
+              <div class="bot-actions">
+                <a href="/accounts/edit/<%= acc.id %>" class="btn btn-sm btn-secondary">Edit</a>
+                <form method="POST" action="/accounts/delete/<%= acc.id %>" onsubmit="return confirm('Delete <%= acc.username %>?')">
+                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              </div>
+            </article>
+          <% }) %>
+        </section>
+      <% } %>
+    </main>
+  </div>
 </body>
 </html>
