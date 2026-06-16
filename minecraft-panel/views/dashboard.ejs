@@ -7,9 +7,10 @@
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body class="dashboard-page">
+  <% const RAM_PER_BOT_GB = 0.45; %>
   <% const onlineCount = accounts.filter((acc) => acc.status === 'active').length; %>
-  <% const queueCount = accounts.filter((acc) => /(queue|queued|pending)/i.test(acc.status || '')).length; %>
-  <% const ramUsage = (accounts.length * 0.45).toFixed(1); %>
+  <% const queueCount = accounts.filter((acc) => acc.status === 'inactive').length; %>
+  <% const ramUsage = (accounts.length * RAM_PER_BOT_GB).toFixed(1); %>
 
   <div class="app-shell">
     <aside class="sidebar">
