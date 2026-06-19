@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.aleksilassila.litematica.printer.v1_21_8.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LitematicaSchematicAccessor",
+    "MixinClientConnection"
+  ],
+  "client": [
+    "AxeItemAccessor",
+    "ButtonListenerMixin",
+    "ConfigsMixin",
+    "GuiConfigsMixin",
+    "InputHandlerMixin",
+    "MixinAccessorClientPlayerEntity",
+    "MixinAccessorKeyBinding",
+    "MixinCamera",
+    "MixinClientPlayerEntity",
+    "MixinMouse",
+    "PlayerMoveC2SPacketMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
